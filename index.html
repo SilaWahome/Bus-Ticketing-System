@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Booking Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            margin-top: 10px;
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .ticket {
+            margin-top: 30px;
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Book a Bus Trip</h1>
+    <form id="booking-form">
+        <label for="from">Pickup Location:</label>
+        <select id="from" name="from">
+            {% for route in routes %}
+            <option value="{{ route.planner.split(' - ')[0] }}">{{ route.planner.split(' - ')[0] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="destination">Destination:</label>
+        <select id="destination" name="destination">
+            {% for route in routes %}
+            <option value="{{ route.planner.split(' - ')[-1] }}">{{ route.planner.split(' - ')[-1] }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="one_way">Is this a one-way trip?</label>
+        <select id="one_way" name="one_way">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <button type="submit">Book Now</button>
+    </form>
+
+    <div id="ticket" class="ticket" style="display: none;">
+        <h2>Ticket</h2>
+        <p><strong>From:</strong> <span id="ticket-from"></span></p>
+        <p><strong>To:</strong> <span id="ticket-destination"></span></p>
+        <p><strong>Fare:</strong> Ksh. <span id="ticket-fare"></span></p>
+        <p><strong>Date:</strong> <span id="ticket-date"></span></p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('booking-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const from = document.getElementById('from').value;
+        const destination = document.getElementById('destination').value;
+        const one_way = document.getElementById('one_way').value;
+        
+        fetch('/book', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                from: from,
+                destination: destination,
+                one_way: one_way
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('ticket-from').innerText = data.from;
+            document.getElementById('ticket-destination').innerText = data.destination;
+            document.getElementById('ticket-fare').innerText = data.fare;
+            document.getElementById('ticket-date').innerText = data.date;
+            document.getElementById('ticket').style.display = 'block';
+        });
+    });
+</script>
+
+</body>
+</html>

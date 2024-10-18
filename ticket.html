@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Ticket Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .ticket {
+            border: 1px solid black;
+            padding: 20px;
+            margin: 20px;
+            width: 300px;
+        }
+        .ticket-header {
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .ticket-content {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket">
+        <div class="ticket-header">Bus Ticket Receipt</div>
+        <div class="ticket-content">Route: {{ route }}</div>
+        <div class="ticket-content">From: {{ from_location }}</div>
+        <div class="ticket-content">Thru: {{ thru_location }}</div>
+        <div class="ticket-content">Destination: {{ destination }}</div>
+        <div class="ticket-content">Fare: Ksh {{ fare }}</div>
+        <div class="ticket-content">Date: {{ ticket_date }}</div>
+        <div class="ticket-content">Remaining Wallet Balance: Ksh {{ wallet }}</div>
+    </div>
+</body>
+</html>
